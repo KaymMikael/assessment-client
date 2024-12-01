@@ -1,15 +1,29 @@
+import axios from "axios";
 import { useState } from "react";
+import axiosHelper from "../axios/axiosHelper";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const navigate = useNavigate("");
   const handleDataChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await axiosHelper.post("/auth/login", formData);
+      navigate("/");
+    } catch (e) {
+      if (e.response && e.response.data.error) {
+        setError(e.response.data.error);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,7 +71,7 @@ const LoginForm = () => {
           />
         </div>
       </div>
-
+      <p className="text-rose-500 font-semibold">{error}</p>
       <div>
         <button
           type="submit"
