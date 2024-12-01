@@ -23,14 +23,6 @@ const routes = [
       </PublicRoute>
     ),
   },
-  {
-    path: "/register",
-    element: (
-      <PublicRoute>
-        <Register />
-      </PublicRoute>
-    ),
-  },
 ];
 
 const App = () => {
